@@ -6,14 +6,20 @@ foreach ($repo in $repos) {
         cd $path
         if (Test-Path .git) {
             git add .
-            git commit -m "Update files from laptop"
-            git push
+            $status = git status --porcelain
+            if ($status) {
+                git commit -m "Update files from laptop"
+            }
+            if (!(git remote | Select-String -Pattern "origin")) {
+                git remote add origin "https://github.com/AryaFatthurahman1/$repo.git"
+            }
+            git push --force -u origin main
         } else {
             git init
             git add .
             git commit -m "Initial commit from laptop"
             git remote add origin "https://github.com/AryaFatthurahman1/$repo.git"
-            git push -u origin main
+            git push --force -u origin main
         }
     }
 }
