@@ -1,0 +1,13 @@
+{
+  "name": "websitebaru-monorepo",
+  "private": true,
+  "scripts": {
+    "react": "cd react-app && npm install && npm run dev",
+    "vue": "cd vue-app && npm install && npm run dev",
+    "next": "cd next-app && npm install && npm run dev",
+    "angular": "cd angular-app && npm install && npx ng serve --open"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  }
+}

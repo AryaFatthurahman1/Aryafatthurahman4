@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book a Tour | Tourify</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <?php include 'config.php'; ?>
+    <?php include 'functions.php'; ?>
+    
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <!-- Navigation sama seperti index.php -->
+    </nav>
+
+    <div class="container mt-5">
+        <h2>Book Your Tour</h2>
+        
+        <?php
+        // Contoh branching untuk menangani parameter GET
+        if (isset($_GET['tour_id'])) {
+            $tourId = $_GET['tour_id'];
+            $tours = getFeaturedTours();
+            $selectedTour = null;
+            
+            // Cari tour yang dipilih
+            foreach ($tours as $tour) {
+                if ($tour['id'] == $tourId) {
+                    $selectedTour = $tour;
+                    break;
+                }
+            }
+            
+            if ($selectedTour) {
+                echo '<div class="card mb-4">';
+                echo '  <div class="card-body">';
+                echo '    <h4>'.$selectedTour['name'].'</h4>';
+                echo '    <p>'.$selectedTour['description'].'</p>';
+                echo '    <p><strong>Price: $'.$selectedTour['price'].' per person</strong></p>';
+                echo '  </div>';
+                echo '</div>';
+            } else {
+                echo '<div class="alert alert-warning">Tour not found!</div>';
+            }
+        } else {
+            echo '<div class="alert alert-info">Please select a tour from our <a href="tours.php">tours page</a>.</div>';
+        }
+        ?>
+        
+        <div class="card">
+            <div class="card-header">
+                Booking Form
+            </div>
+            <div class="card-body">
+                <form action="process_booking.php" method="POST">
+                    <?php if (isset($selectedTour)): ?>
+                        <input type="hidden" name="tour_id" value="<?php echo $selectedTour['id']; ?>">
+                    <?php endif; ?>
+                    
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Full Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="participants" class="form-label">Number of Participants</label>
+                        <select class="form-control" id="participants" name="participants" required>
+                            <?php
+                            // Contoh looping for
+                            for ($i = 1; $i <= 10; $i++) {
+                                echo "<option value=\"$i\">$i</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Preferred Date</label>
+                        <input type="date" class="form-control" id="date" name="date" required>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="newsletter" name="newsletter" checked>
+                        <label class="form-check-label" for="newsletter">Subscribe to our newsletter</label>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bg-dark text-white text-center p-3 mt-5">
+        <p>&copy; <?php echo $currentYear; ?> Tourify. All rights reserved.</p>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

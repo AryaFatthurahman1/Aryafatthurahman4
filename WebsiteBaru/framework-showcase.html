@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Multi-Framework Demo</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384..." crossorigin="anonymous" />
+  <style>
+    body { background:#070707; color:#eee; font-family:Segoe UI, sans-serif; }
+    .card { background:#121212; border:1px solid #2b2b2b; }
+    .section-title { color:#7fffd4; }
+    .log { background:#0e0e0e; color:#adff2f; padding:.7rem; border-radius:6px; min-height:80px; overflow:auto; }
+  </style>
+</head>
+<body>
+  <main class="container py-4">
+    <h1 class="section-title">Multi-Framework Showcase</h1>
+    <p>Contoh: HTML/CSS/JS, Bootstrap, React, Vue, TypeScript, plus petunjuk Angular & Laravel.</p>
+
+    <section class="card p-3 mb-3">
+      <h2>1. HTML + CSS + JavaScript</h2>
+      <button id="vanillaBtn" class="btn btn-success">Klik Saya (Vanilla JS)</button>
+      <div id="vanillaLog" class="log mt-2">status: siap</div>
+    </section>
+
+    <section class="card p-3 mb-3">
+      <h2>2. Bootstrap</h2>
+      <div class="alert alert-primary" role="alert">Bootstrap alert aktif!</div>
+    </section>
+
+    <section class="card p-3 mb-3">
+      <h2>3. React (cdn)</h2>
+      <div id="reactRoot"></div>
+    </section>
+
+    <section class="card p-3 mb-3">
+      <h2>4. Vue (cdn)</h2>
+      <div id="vueRoot">Loading...</div>
+    </section>
+
+    <section class="card p-3 mb-3">
+      <h2>5. TypeScript Demo (compile manual)</h2>
+      <p>Script: <code>typescript-sample/main.ts</code></p>
+      <div id="tsRoot" class="log">ts output...</div>
+    </section>
+
+    <section class="card p-3 mb-3">
+      <h2>6. Angular & Laravel (skeleton)</h2>
+      <p>Silakan lihat <code>angular-sample/README.md</code> dan <code>laravel-sample/README.md</code>.</p>
+      <p>
+        Angular: <a href="angular-app/README.md" target="_blank">angular-app/README.md</a><br>
+        Laravel: <a href="laravel-sample/README.md" target="_blank">laravel-sample/README.md</a>
+      </p>
+    </section>
+
+    <section class="card p-3 mb-3">
+      <h2>7. Next.js</h2>
+      <p>Project ada di <code>next-app/</code>. Jalankan <code>npm install</code> + <code>npm run dev</code>.</p>
+      <p>
+        Link: <a href="next-app/pages/index.js" target="_blank">next-app/pages/index.js</a>
+      </p>
+    </section>
+
+    <section class="card p-3 mb-3">
+      <h2>8. React (Vite)</h2>
+      <p>Project ada di <code>react-app/</code>. Jalankan <code>npm install</code> + <code>npm run dev</code>.</p>
+    </section>
+
+    <section class="card p-3 mb-3">
+      <h2>9. Vue (Vite)</h2>
+      <p>Project ada di <code>vue-app/</code>. Jalankan <code>npm install</code> + <code>npm run dev</code>.</p>
+    </section>
+
+    <section class="card p-3 mb-3">
+      <h2>10. Angular App (CLI skeleton)</h2>
+      <p>Project ada di <code>angular-app/</code>. Jalankan <code>npm install</code> + <code>npx ng serve --open</code>.</p>
+    </section>
+  </main>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script>
+    document.getElementById('vanillaBtn').addEventListener('click', ()=>{
+      const log = document.getElementById('vanillaLog');
+      log.textContent = `Diklik ${new Date().toLocaleTimeString()}`;
+    });
+
+    const ReactApp = () => React.createElement('div', {style:{color:'#7cdfff'}}, 'React CDN aktif!');
+    ReactDOM.createRoot(document.getElementById('reactRoot')).render(React.createElement(ReactApp));
+
+    const vueApp = Vue.createApp({ data() { return {message:'Vue CDN aktif!'}; } });
+    vueApp.component('message-box',{template:'<p style="color:#90ee90">{{ message }}</p>', data(){return{message:'Vue CDN aktif!'}}});
+    vueApp.mount('#vueRoot');
+
+    document.getElementById('tsRoot').textContent = 'TypeScript result: ' + (function(){
+      const now = new Date();
+      return `TS compiled JS runs at ${now.toLocaleTimeString()}`;
+    })();
+  </script>
+</body>
+</html>

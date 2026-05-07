@@ -1,0 +1,49 @@
+{
+    "compilerOptions": {
+        "target": "ESNext",
+        "useDefineForClassFields": true,
+        "lib": [
+            "DOM",
+            "DOM.Iterable",
+            "ESNext"
+        ],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
+        "jsx": "react-jsx",
+        "baseUrl": ".",
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "paths": {
+            "@/*": [
+                "sumber/*"
+            ],
+            "@komponen/*": [
+                "sumber/komponen/*"
+            ],
+            "@layanan/*": [
+                "sumber/layanan/*"
+            ],
+            "@tipe/*": [
+                "sumber/tipe/*"
+            ],
+            "@api/*": [
+                "api/*"
+            ]
+        }
+    },
+    "include": [
+        "sumber"
+    ],
+    "references": [
+        {
+            "path": "./konfigurasi/tsconfig.node.json"
+        }
+    ]
+}

@@ -1,0 +1,124 @@
+# Project information
+site_name: Granite Workshop
+site_url: https://ibm.github.io/granite-workshop
+site_author: IBM Research
+
+# Repository
+repo_name: granite-workshop
+repo_url: https://github.com/IBM/granite-workshop
+edit_uri: edit/main/docs
+
+# Navigation
+nav:
+  - Welcome:
+    - About the workshop: README.md
+  - Workshop:
+    - Lab 0. Pre-work: pre-work/README.md
+    - Lab 1. Summarize a text document with Granite: lab-1/README.md
+    - Lab 2. Retrieval Augmented Generation (RAG) with Langchain: lab-2/README.md
+    - Lab 3. Energy Demand Forecasting with Granite Timeseries (TTM): lab-3/README.md
+    - Lab 4. Entity Extraction from text using Granite: lab-4/README.md
+    - Lab 5. Multimodal RAG using Granite and Docling: lab-5/README.md
+  - References:
+    - IBM Granite Community: https://github.com/ibm-granite-community
+
+
+## DO NOT CHANGE BELOW THIS LINE
+
+# Copyright
+copyright: Copyright &copy; 2025- IBM Research
+
+# Theme
+theme:
+  name: material
+  font:
+    text: IBM Plex Sans
+    code: IBM Plex Mono
+  icon:
+    logo: material/library
+  logo: images/ibm-blue-background.png
+  favicon: images/favicon.ico
+  features:
+    - navigation.tabs
+    - navigation.footer
+    #- navigation.instant
+    - content.code.copy
+  palette:
+    scheme: default
+    primary: blue
+    accent: blue
+
+# Plugins
+plugins:
+  - search
+  - social
+  - macros:
+      on_undefined: strict
+
+# Customization
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ibm
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/ibmdeveloper
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/ibm/
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/user/developerworks
+    - icon: fontawesome/brands/dev
+      link: https://dev.to/ibmdeveloper
+  colab_url: https://colab.research.google.com/github/IBM/granite-workshop
+
+# Extensions
+markdown_extensions:
+  - abbr
+  - attr_list
+  - def_list
+  - footnotes
+  - meta
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.blocks.admonition:
+      types:
+        - note
+        - abstract
+        - info
+        - tip
+        - success
+        - question
+        - warning
+        - failure
+        - danger
+        - bug
+        - example
+        - quote
+  - pymdownx.blocks.caption:
+  - pymdownx.blocks.tab:
+      alternate_style: true
+  - pymdownx.caret
+  - pymdownx.critic
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.snippets:
+      check_paths: true
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde

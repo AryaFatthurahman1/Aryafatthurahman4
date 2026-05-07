@@ -1,0 +1,6 @@
+fastapi
+uvicorn
+docling
+pydantic
+langchain-community
+python-multipart

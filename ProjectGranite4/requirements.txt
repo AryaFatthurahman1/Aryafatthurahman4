@@ -1,0 +1,10 @@
+langchain
+langchain-chroma
+chromadb
+sentence-transformers
+transformers
+pillow
+docling
+git+https://github.com/ibm-granite-community/utils.git
+git+https://github.com/ibm-granite-community/langchain-replicate.git
+notebook

@@ -1,0 +1,12 @@
+<IfModule mod_rewrite.c>
+    DirectoryIndex utama.php
+    RewriteEngine On
+    
+    # 1. Paksa root ke utama.php
+    RewriteRule ^$ utama.php [L]
+
+    # 2. Jika permintaan bukan file atau direktori, arahkan ke utama.php
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ utama.php [QSA,L]
+</IfModule>

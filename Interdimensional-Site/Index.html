@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interdimensional Luxury | Beyond 2025</title>
+    <meta name="description" content="Experience the future of luxury across dimensions. A futuristic portal to 2025 and beyond.">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+</head>
+<body>
+    <div class="noise-overlay"></div>
+    <div class="cursor"></div>
+    
+    <header>
+        <div class="logo">
+            <div class="logo-text">INTERDIMENSIONAL</div>
+            <div class="logo-symbol">∞</div>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#dimensions" data-text="Dimensions">Dimensions</a></li>
+                <li><a href="#experiences" data-text="Experiences">Experiences</a></li>
+                <li><a href="#technology" data-text="Technology">Technology</a></li>
+                <li><a href="#contact" data-text="Contact">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="menu-toggle">
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="hero-content">
+                <h1 class="glitch" data-text="Beyond Dimensions">Beyond Dimensions</h1>
+                <p class="subtitle">Experience luxury across the multiverse</p>
+                <div class="cta-container">
+                    <a href="#explore" class="cta-button">
+                        <span class="cta-text">Explore Dimensions</span>
+                        <span class="cta-icon">→</span>
+                    </a>
+                </div>
+            </div>
+            <div id="hero-canvas"></div>
+            <div class="scroll-indicator">
+                <span>Scroll to Discover</span>
+                <div class="scroll-line"></div>
+            </div>
+        </section>
+
+        <section id="dimensions" class="section-dark">
+            <div class="section-header">
+                <h2>Dimensional Portals</h2>
+                <p>Access exclusive realities beyond imagination</p>
+            </div>
+            <div class="dimension-cards">
+                <div class="dimension-card" data-dimension="alpha">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <h3>Alpha Dimension</h3>
+                            <div class="dimension-preview"></div>
+                        </div>
+                        <div class="card-back">
+                            <p>A realm of crystalline structures and geometric perfection where thought manifests as architecture.</p>
+                            <a href="#" class="dimension-link">Enter Portal</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card" data-dimension="omega">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <h3>Omega Dimension</h3>
+                            <div class="dimension-preview"></div>
+                        </div>
+                        <div class="card-back">
+                            <p>The edge of reality where time flows backward and luxury is defined by temporal exclusivity.</p>
+                            <a href="#" class="dimension-link">Enter Portal</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="dimension-card" data-dimension="quantum">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <h3>Quantum Dimension</h3>
+                            <div class="dimension-preview"></div>
+                        </div>
+                        <div class="card-back">
+                            <p>Exist in multiple states simultaneously, experiencing all possibilities of luxury at once.</p>
+                            <a href="#" class="dimension-link">Enter Portal</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="experiences" class="section-light">
+            <div class="section-header">
+                <h2>Transcendent Experiences</h2>
+                <p>Beyond the limits of conventional reality</p>
+            </div>
+            <div class="experience-showcase">
+                <div class="experience-item">
+                    <div class="experience-visual" id="experience-canvas-1"></div>
+                    <div class="experience-content">
+                        <h3>Gravitational Wellness</h3>
+                        <p>Therapeutic sessions in zero-gravity environments enhanced with quantum healing frequencies.</p>
+                        <div class="experience-stats">
+                            <div class="stat">
+                                <span class="stat-value">99.8%</span>
+                                <span class="stat-label">Consciousness Expansion</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">∞</span>
+                                <span class="stat-label">Dimensional Reach</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="experience-item reversed">
+                    <div class="experience-content">
+                        <h3>Temporal Dining</h3>
+                        <p>Cuisine that exists across multiple timelines simultaneously, offering flavors that evolve as you experience them.</p>
+                        <div class="experience-stats">
+                            <div class="stat">
+                                <span class="stat-value">12+</span>
+                                <span class="stat-label">Time Periods</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">5D</span>
+                                <span class="stat-label">Sensory Experience</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="experience-visual" id="experience-canvas-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="technology" class="section-dark">
+            <div class="section-header">
+                <h2>Interdimensional Technology</h2>
+                <p>Innovations from beyond the known universe</p>
+            </div>
+            <div class="tech-showcase">
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <div class="hologram"></div>
+                    </div>
+                    <h3>Quantum Entanglement Communication</h3>
+                    <p>Instant messaging across infinite dimensions with zero latency.</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <div class="hologram"></div>
+                    </div>
+                    <h3>Neural Reality Interfaces</h3>
+                    <p>Direct consciousness connection to digital and alternate realities.</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <div class="hologram"></div>
+                    </div>
+                    <h3>Temporal Manipulation Fields</h3>
+                    <p>Experience time at your preferred rate within designated luxury zones.</p>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <div class="hologram"></div>
+                    </div>
+                    <h3>Gravity Sculpting</h3>
+                    <p>Architectural spaces that defy conventional physics for unique experiences.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="section-light">
+            <div class="section-header">
+                <h2>Interdimensional Contact</h2>
+                <p>Connect across the multiverse</p>
+            </div>
+            <div class="contact-container">
+                <form class="contact-form">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" placeholder="Enter your name" required>
+                        <div class="form-line"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Quantum Email</label>
+                        <input type="email" id="email" placeholder="Your interdimensional contact" required>
+                        <div class="form-line"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="dimension">Home Dimension</label>
+                        <select id="dimension">
+                            <option value="earth-prime">Earth Prime</option>
+                            <option value="alpha-centauri">Alpha Centauri</option>
+                            <option value="quantum-realm">Quantum Realm</option>
+                            <option value="other">Other Dimension</option>
+                        </select>
+                        <div class="form-line"></div>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Your Message</label>
+                        <textarea id="message" placeholder="Share your interdimensional inquiry" required></textarea>
+                        <div class="form-line"></div>
+                    </div>
+                    <button type="submit" class="submit-button">
+                        <span>Transmit Across Dimensions</span>
+                        <div class="button-effect"></div>
+                    </button>
+                </form>
+                <div class="contact-visual" id="contact-canvas"></div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-logo">
+                <div class="logo-text">INTERDIMENSIONAL</div>
+                <div class="logo-symbol">∞</div>
+            </div>
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Dimensions</h4>
+                    <ul>
+                        <li><a href="#">Alpha Dimension</a></li>
+                        <li><a href="#">Omega Dimension</a></li>
+                        <li><a href="#">Quantum Dimension</a></li>
+                        <li><a href="#">Custom Portal Creation</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Experiences</h4>
+                    <ul>
+                        <li><a href="#">Gravitational Wellness</a></li>
+                        <li><a href="#">Temporal Dining</a></li>
+                        <li><a href="#">Consciousness Expansion</a></li>
+                        <li><a href="#">Quantum Retreats</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Interdimensional Terms</a></li>
+                        <li><a href="#">Privacy Across Realities</a></li>
+                        <li><a href="#">Temporal Responsibility</a></li>
+                        <li><a href="#">Quantum Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2025 Interdimensional Luxury. All dimensions reserved.</p>
+            <div class="dimensional-coordinates">
+                <span>Dimensional Coordinates: 42.χ.π.∞</span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

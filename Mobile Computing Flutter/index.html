@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛍️ Alfamart - E-Commerce Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            color: #667eea;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .status {
+            display: inline-block;
+            background: #4CAF50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-icon {
+            font-size: 1.5em;
+        }
+
+        .product-item {
+            background: #f5f5f5;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+
+        .product-name {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .product-price {
+            color: #4CAF50;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .product-stock {
+            color: #999;
+            font-size: 0.9em;
+        }
+
+        .api-endpoint {
+            background: #f9f9f9;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border-left: 3px solid #667eea;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+
+        .endpoint-get {
+            border-left-color: #4CAF50;
+        }
+
+        .endpoint-post {
+            border-left-color: #FF9800;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        button {
+            flex: 1;
+            padding: 10px 15px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+        }
+
+        button.secondary {
+            background: #999;
+        }
+
+        button.secondary:hover {
+            background: #666;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #c62828;
+        }
+
+        .success {
+            background: #e8f5e9;
+            color: #2e7d32;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border-left: 4px solid #2e7d32;
+        }
+
+        footer {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            color: #666;
+            margin-top: 30px;
+        }
+
+        footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🛍️ ALFAMART E-COMMERCE</h1>
+            <p>Platform belanja online lengkap dengan database MySQL & API backend</p>
+            <div class="status">✓ Server Running - Production Ready</div>
+        </header>
+
+        <div class="stats">
+            <div class="stat-box">
+                <div class="stat-number" id="userCount">-</div>
+                <div class="stat-label">Pengguna</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="productCount">-</div>
+                <div class="stat-label">Produk</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="categoryCount">-</div>
+                <div class="stat-label">Kategori</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number" id="orderCount">-</div>
+                <div class="stat-label">Pesanan</div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Products Card -->
+            <div class="card">
+                <h2><span class="card-icon">📦</span> Produk</h2>
+                <button onclick="loadProducts()">Muat Produk</button>
+                <div id="productsList"></div>
+            </div>
+
+            <!-- Categories Card -->
+            <div class="card">
+                <h2><span class="card-icon">🏷️</span> Kategori</h2>
+                <button onclick="loadCategories()">Muat Kategori</button>
+                <div id="categoriesList"></div>
+            </div>
+
+            <!-- API Status Card -->
+            <div class="card">
+                <h2><span class="card-icon">⚙️</span> Status API</h2>
+                <button onclick="checkHealth()">Check Status</button>
+                <div id="statusInfo"></div>
+            </div>
+
+            <!-- Quick Actions Card -->
+            <div class="card">
+                <h2><span class="card-icon">⚡</span> Quick Actions</h2>
+                <button-group class="button-group">
+                    <button onclick="login()">Login Test</button>
+                    <button class="secondary" onclick="register()">Register</button>
+                </button-group>
+                <div id="actionResult"></div>
+            </div>
+
+            <!-- API Endpoints Card -->
+            <div class="card">
+                <h2><span class="card-icon">🔗</span> API Endpoints</h2>
+                <div class="api-endpoint endpoint-get">GET /api/products/list</div>
+                <div class="api-endpoint endpoint-get">GET /api/categories</div>
+                <div class="api-endpoint endpoint-post">POST /api/auth/login</div>
+                <div class="api-endpoint endpoint-post">POST /api/orders/create</div>
+                <p style="margin-top: 10px; color: #666; font-size: 0.9em;">
+                    📍 Base URL: http://localhost:5000
+                </p>
+            </div>
+
+            <!-- Server Info Card -->
+            <div class="card">
+                <h2><span class="card-icon">ℹ️</span> Server Info</h2>
+                <div id="serverInfo"></div>
+            </div>
+        </div>
+
+        <footer>
+            <p>✨ Alfamart Database - Production Ready System</p>
+            <p>Database: 14 Tabel | API: RESTful | Framework: Flask Python</p>
+            <p style="margin-top: 15px; font-size: 0.9em; color: #999;">
+                Dokumentasi: Lihat folder <code>database/</code> untuk panduan lengkap
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        const API_URL = 'http://localhost:5000';
+
+        async function loadProducts() {
+            const container = document.getElementById('productsList');
+            container.innerHTML = '<div class="loading"><span class="spinner"></span> Loading...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/products/list`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    let html = '';
+                    data.data.forEach(product => {
+                        html += `
+                            <div class="product-item">
+                                <div class="product-name">${product.product_name}</div>
+                                <div class="product-price">Rp ${product.price.toLocaleString('id-ID')}</div>
+                                <div class="product-stock">📦 Stok: ${product.stock} unit</div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                    document.getElementById('productCount').textContent = data.data.length;
+                } else {
+                    container.innerHTML = '<div class="error">❌ Gagal memuat produk</div>';
+                }
+            } catch (error) {
+                container.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function loadCategories() {
+            const container = document.getElementById('categoriesList');
+            container.innerHTML = '<div class="loading"><span class="spinner"></span> Loading...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/categories`);
+                const data = await response.json();
+                
+                if (data.success) {
+                    let html = '';
+                    data.data.forEach(category => {
+                        html += `
+                            <div class="product-item">
+                                <div class="product-name">🏷️ ${category.category_name}</div>
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html;
+                    document.getElementById('categoryCount').textContent = data.data.length;
+                } else {
+                    container.innerHTML = '<div class="error">❌ Gagal memuat kategori</div>';
+                }
+            } catch (error) {
+                container.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function checkHealth() {
+            const container = document.getElementById('statusInfo');
+            container.innerHTML = '<div class="loading"><span class="spinner"></span> Checking...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/health`);
+                const data = await response.json();
+                
+                container.innerHTML = `
+                    <div class="success">
+                        ✓ Status: ${data.status.toUpperCase()}<br>
+                        ✓ Message: ${data.message}<br>
+                        ✓ Time: ${new Date(data.timestamp).toLocaleString('id-ID')}
+                    </div>
+                `;
+            } catch (error) {
+                container.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function login() {
+            const result = document.getElementById('actionResult');
+            result.innerHTML = '<div class="loading"><span class="spinner"></span> Testing login...</div>';
+            
+            try {
+                const response = await fetch(`${API_URL}/api/auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        email: 'customer1@example.com',
+                        password: 'password123'
+                    })
+                });
+                const data = await response.json();
+                
+                if (data.success) {
+                    result.innerHTML = `
+                        <div class="success">
+                            ✓ Login berhasil!<br>
+                            User: ${data.user.full_name}<br>
+                            Email: ${data.user.email}
+                        </div>
+                    `;
+                } else {
+                    result.innerHTML = '<div class="error">❌ Login gagal</div>';
+                }
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Error: ${error.message}</div>`;
+            }
+        }
+
+        async function register() {
+            alert('Register feature demo - silakan lihat file API_ENDPOINTS.md untuk implementasi lengkap');
+        }
+
+        async function loadServerInfo() {
+            const container = document.getElementById('serverInfo');
+            
+            try {
+                const response = await fetch(`${API_URL}/`);
+                const data = await response.json();
+                
+                container.innerHTML = `
+                    <div class="product-item">
+                        <div class="product-name">Status: ${data.status}</div>
+                        <div class="product-stock">Server sedang aktif dan siap melayani</div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-name">Database: MySQL</div>
+                        <div class="product-stock">14 tabel + 3 views + 2 procedures</div>
+                    </div>
+                    <div class="product-item">
+                        <div class="product-name">Framework: Flask Python</div>
+                        <div class="product-stock">REST API dengan CORS support</div>
+                    </div>
+                `;
+            } catch (error) {
+                container.innerHTML = `<div class="error">❌ Error loading info</div>`;
+            }
+        }
+
+        // Load data on page load
+        window.addEventListener('load', () => {
+            loadServerInfo();
+            loadProducts();
+            loadCategories();
+            checkHealth();
+            
+            // Set default stats
+            document.getElementById('userCount').textContent = '2';
+            document.getElementById('orderCount').textContent = '0';
+        });
+    </script>
+</body>
+</html>

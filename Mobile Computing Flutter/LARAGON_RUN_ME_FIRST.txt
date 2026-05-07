@@ -1,0 +1,14 @@
+LARAGON WEBSITE SUDAH BISA DIAKSES DARI:
+
+http://localhost/mobile-computing-flutter/
+
+JANGAN BUKA:
+http://mobile%20computing%20flutter.test/
+
+JIKA MAU DOMAIN .TEST:
+1. Jalankan fix_laragon_host.ps1 sebagai Administrator
+2. Restart Apache di Laragon
+3. Buka http://mobile-computing-flutter.test/
+
+JIKA MAU CEPAT:
+Double click OPEN_WEBSITE.bat

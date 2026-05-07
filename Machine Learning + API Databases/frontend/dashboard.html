@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Machine Learning Dashboard</title>
+    <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🤖 Machine Learning Dashboard</h1>
+            <p class="subtitle">Laragon + Python + MySQL + Machine Learning + API</p>
+        </header>
+
+        <div class="dashboard">
+            <div class="card">
+                <h2>📊 Database Status</h2>
+                <div class="card-value" id="db-status">Loading...</div>
+                <div class="card-info">MySQL Database</div>
+                <button class="btn btn-secondary" onclick="checkDBStatus()">Check Status</button>
+            </div>
+
+            <div class="card">
+                <h2>🔌 API Server</h2>
+                <div class="card-value" id="api-status">Loading...</div>
+                <div class="card-info">Flask API Backend</div>
+                <button class="btn btn-secondary" onclick="checkAPIStatus()">Check Status</button>
+            </div>
+
+            <div class="card">
+                <h2>🎯 Models</h2>
+                <div class="card-value" id="model-count">0</div>
+                <div class="card-info">Trained ML Models</div>
+                <button class="btn btn-secondary" onclick="openAPI('/api/models')">View Models</button>
+            </div>
+
+            <div class="card">
+                <h2>🔮 Predictions</h2>
+                <div class="card-value" id="prediction-count">0</div>
+                <div class="card-info">Total Predictions</div>
+                <button class="btn btn-secondary" onclick="openAPI('/api/predictions')">View Predictions</button>
+            </div>
+
+            <div class="card">
+                <h2>👥 Users</h2>
+                <div class="card-value">1</div>
+                <div class="card-info">Registered Users</div>
+                <div class="card-info">Admin Account</div>
+            </div>
+
+            <div class="card">
+                <h2>📈 Statistics</h2>
+                <div class="card-info">✓ Classification Models</div>
+                <div class="card-info">✓ Regression Models</div>
+                <div class="card-info">✓ Feature Engineering</div>
+            </div>
+        </div>
+
+        <div class="card card-setup">
+            <h2>🚀 Quick Setup Guide</h2>
+
+            <h3>1. Database Setup</h3>
+            <div class="code">-- Import schema.sql ke MySQL<br>-- Path: database/sql/schema.sql<br>-- Akses: http://localhost/phpmyadmin</div>
+
+            <h3>2. Python Dependencies</h3>
+            <div class="code">pip install -r requirements.txt</div>
+
+            <h3>3. Environment Configuration</h3>
+            <div class="code">cd backend<br>copy .env.example .env<br>-- Edit .env dengan konfigurasi MySQL Anda</div>
+
+            <h3>4. Jalankan API Server</h3>
+            <div class="code">cd backend<br>python app.py</div>
+
+            <h3>5. Akses API</h3>
+            <div class="code"><span id="api-url-text">http://localhost:5000/api</span></div>
+        </div>
+
+        <div class="links">
+            <a href="http://localhost/phpmyadmin" class="link-card" target="_blank" rel="noopener noreferrer">
+                <h3>🗄️ PHPMyAdmin</h3>
+                <p>Kelola Database MySQL Anda</p>
+            </a>
+
+            <a href="http://localhost:5000/api" id="api-link" class="link-card" target="_blank" rel="noopener noreferrer">
+                <h3>🔌 API Endpoint</h3>
+                <p>Flask REST API Backend</p>
+            </a>
+
+            <a href="http://localhost:8080" class="link-card" target="_blank" rel="noopener noreferrer">
+                <h3>🌐 HTTP Server</h3>
+                <p>Laragon Built-in Server</p>
+            </a>
+
+            <a href="#" class="link-card" onclick="showCode()">
+                <h3>💻 Code Structure</h3>
+                <p>Lihat Struktur Folder Project</p>
+            </a>
+        </div>
+
+        <div class="card card-models">
+            <h2>📚 Machine Learning Models</h2>
+
+            <div class="model-section">
+                <h3>Classification Models</h3>
+                <div class="card-info">✓ Random Forest Classifier</div>
+                <div class="card-info">✓ Gradient Boosting Classifier</div>
+                <div class="card-info">✓ Logistic Regression</div>
+                <div class="card-info">✓ Support Vector Machine (SVM)</div>
+            </div>
+
+            <div class="model-section">
+                <h3>Regression Models</h3>
+                <div class="card-info">✓ Random Forest Regressor</div>
+                <div class="card-info">✓ Gradient Boosting Regressor</div>
+                <div class="card-info">✓ Linear Regression</div>
+                <div class="card-info">✓ Ridge & Lasso Regression</div>
+            </div>
+        </div>
+
+        <footer>
+            <p>Machine Learning + Data Sciences Project | Laragon Development</p>
+            <p>© 2024 | All Rights Reserved</p>
+        </footer>
+    </div>
+
+    <script>
+        // determine base URL dynamically so dashboard works on any host/domain
+        const API_BASE = window.location.origin + '/api';
+
+        async function checkDBStatus() {
+            try {
+                const response = await fetch(API_BASE + '/db-status');
+                const data = await response.json();
+                
+                const statusElement = document.getElementById('db-status');
+                if (data.status === 'connected') {
+                    statusElement.innerHTML = '<span class="status active">✓ Connected</span>';
+                } else {
+                    statusElement.innerHTML = '<span class="status inactive">✗ Error</span>';
+                }
+            } catch (error) {
+                document.getElementById('db-status').innerHTML = '<span class="status inactive">✗ Offline</span>';
+            }
+        }
+
+        async function checkAPIStatus() {
+            try {
+                const response = await fetch(API_BASE + '/health');
+                if (response.ok) {
+                    document.getElementById('api-status').innerHTML = '<span class="status active">✓ Running</span>';
+                }
+            } catch (error) {
+                document.getElementById('api-status').innerHTML = '<span class="status inactive">✗ Offline</span>';
+            }
+        }
+
+        function openAPI(endpoint) {
+            window.open(API_BASE + endpoint, '_blank');
+        }
+
+        function showCode() {
+            alert(`Project Structure:
+├── backend/
+│   ├── config/          - Database configuration
+│   ├── ml_models/       - ML model implementations
+│   ├── routes/          - API endpoints
+│   ├── utils/           - Helper functions
+│   └── app.py           - Main Flask app
+├── database/
+│   └── sql/
+│       └── schema.sql   - Database schema
+├── frontend/
+│   └── dashboard.html   - This dashboard
+└── requirements.txt     - Python dependencies`);
+        }
+
+        // populate API link and text
+        window.addEventListener('load', () => {
+            document.getElementById('api-url-text').textContent = API_BASE;
+            document.getElementById('api-link').href = API_BASE;
+
+            checkDBStatus();
+            checkAPIStatus();
+        });
+
+        // Refresh status every 30 seconds
+        setInterval(() => {
+            checkDBStatus();
+            checkAPIStatus();
+        }, 30000);
+    </script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "Jakarta Luxury AI - Travel & Culinary",
+  "description": "Sistem manajemen admin dan portal reservasi mewah untuk desain travel dan kuliner Jakarta, ditenagai oleh Gemini AI.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone",
+    "geolocation"
+  ]
+}

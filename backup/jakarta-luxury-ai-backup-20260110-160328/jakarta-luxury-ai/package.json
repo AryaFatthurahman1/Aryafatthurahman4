@@ -1,0 +1,42 @@
+{
+  "name": "jakarta-luxury-ai-travel-culinary",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "author": "Kelompok 13",
+  "contributors": [
+    "Kayla Ariellia M. (2023230048)",
+    "M. Fachri Ardana (2023230035)",
+    "M. Arya F. (2023230006)",
+    "Novi Yanti S. (2023230052)"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "setup": "php skrip/setup.php",
+    "test": "php skrip/test.php"
+  },
+  "dependencies": {
+    "@google/genai": "^1.34.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/eslint-plugin": "^8.51.0",
+    "@typescript-eslint/parser": "^8.51.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9.39.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "globals": "^16.5.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.17",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
+  }
+}

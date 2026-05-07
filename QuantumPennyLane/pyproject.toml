@@ -1,0 +1,128 @@
+[project]
+name = "pytest-quantum"
+version = "1.0.0"
+description = "A cross-framework pytest plugin for quantum program testing with 80+ assertions"
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+license = { text = "MIT" }
+authors = [
+  { name = "Tejas Ghatule" },
+  { name = "Quantum Software Team" }
+]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Framework :: Pytest",
+  "Intended Audience :: Science/Research",
+  "Intended Audience :: Developers",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Topic :: Software Development :: Testing"
+]
+dependencies = [
+  "pytest>=8.0",
+  "numpy>=1.24.0",
+  "scipy>=1.10.0"
+]
+[project.optional-dependencies]
+qiskit = [
+  "qiskit>=1.0",
+  "qiskit-aer>=0.13"
+]
+cirq = [
+  "cirq>=1.0"
+]
+braket = [
+  "amazon-braket-sdk>=1.0"
+]
+pennylane = [
+  "pennylane>=0.36"
+]
+graphix = [
+  "graphix>=0.3"
+]
+pytket = [
+  "pytket>=1.0"
+]
+ibm = [
+  "qiskit-ibm-runtime>=0.20"
+]
+mitiq = [
+  "mitiq>=0.25"
+]
+cvxpy = [
+  "cvxpy>=1.3"
+]
+stim = [
+  "stim>=1.13"
+]
+qutip = [
+  "qutip>=4.7"
+]
+tequila = [
+  "tequila-basic>=1.8; python_version<'3.13'"
+]
+syrec = [
+  "mqt.syrec>=1.8; python_version<'3.13'"
+]
+dev = [
+  "isort>=5.12.0",
+  "black>=23.0.0",
+  "ruff>=0.1.0",
+  "mypy>=1.5.0",
+  "pytest-cov>=4.0",
+  "pre-commit>=3.0"
+]
+docs = [
+  "sphinx>=7.0",
+  "sphinx-rtd-theme>=1.3",
+  "myst-parser>=2.0"
+]
+all = [
+  "qiskit>=1.0",
+  "qiskit-aer>=0.13",
+  "cirq>=1.0",
+  "amazon-braket-sdk>=1.0",
+  "pennylane>=0.44",
+  "graphix>=0.3",
+  "pytket>=1.0",
+  "qiskit-ibm-runtime>=0.20",
+  "mitiq>=0.25",
+  "cvxpy>=1.3",
+  "stim>=1.13",
+  "qutip>=5.0",
+  "tequila-basic>=1.8; python_version<'3.13'",
+  "mqt.syrec>=1.8; python_version<'3.13'"
+]
+[project.urls]
+Home = "https://github.com/qbench/pytest-quantum"
+Source = "https://github.com/qbench/pytest-quantum"
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+[tool.pytest.ini_options]
+python_files = ["test_*.py"]
+addopts = "-q"
+[project.entry-points."pytest11"]
+pytest_quantum = "pytest_quantum.plugin"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.isort]
+profile = "black"
+multi_line_output = 3
+line_length = 88
+known_first_party = ["pytest_quantum"]
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true

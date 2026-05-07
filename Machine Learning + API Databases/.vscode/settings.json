@@ -1,0 +1,22 @@
+{
+  "python.defaultInterpreterPath": "${workspaceFolder}/.venv/Scripts/python.exe",
+  "python.terminal.activateEnvironment": true,
+  "python.analysis.extraPaths": [
+    "backend"
+  ],
+  "files.associations": {
+    "*.sql": "sql"
+  },
+  "sqltools.connections": [
+    {
+      "name": "Local MySQL",
+      "driver": "MySQL",
+      "server": "localhost",
+      "port": 3306,
+      "database": "ml_api_db",
+      "username": "root",
+      "password": "",
+      "previewLimit": 50
+    }
+  ]
+}

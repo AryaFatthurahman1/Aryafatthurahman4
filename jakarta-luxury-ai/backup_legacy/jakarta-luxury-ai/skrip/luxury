@@ -1,0 +1,61 @@
+<?php
+// scripts/luxury - A helper script to manage Jakarta Luxury AI project
+
+$args = array_slice($argv, 1);
+$command = isset($args[0]) ? $args[0] : 'help';
+
+echo "\n✨ Jakarta Luxury AI - CLI Helper ✨\n";
+echo "=====================================\n\n";
+
+switch ($command) {
+    case 'serve':
+        echo "Starting server...\n";
+        echo "Localhost: http://localhost:3001 (Frontend)\n";
+        echo "Laragon:   http://jakarta-luxury-ai.test (Backend/Production)\n";
+        echo "Running 'npm run dev'...\n";
+        passthru('npm run dev');
+        break;
+
+    case 'build':
+        echo "Building project for production...\n";
+        passthru('npm run build');
+        echo "\nBuild complete! Access at http://jakarta-luxury-ai.test\n";
+        break;
+
+    case 'migrate':
+        echo "Setting up database...\n";
+        require_once __DIR__ . '/../api/config/database.php';
+        try {
+            $database = new Database();
+            $db = $database->getConnection();
+            
+            $sql = file_get_contents(__DIR__ . '/../api/database.sql');
+            $db->exec($sql);
+            echo "✅ Database 'jakarta_luxury_ai' setup successfully.\n";
+            
+            if (file_exists(__DIR__ . '/../update_culinary.sql')) {
+                $sql2 = file_get_contents(__DIR__ . '/../update_culinary.sql');
+                $db->exec($sql2);
+                echo "✅ Culinary data updated.\n";
+            }
+
+            if (file_exists(__DIR__ . '/../update_travel.sql')) {
+                $sql3 = file_get_contents(__DIR__ . '/../update_travel.sql');
+                $db->exec($sql3);
+                echo "✅ Travel data updated.\n";
+            }
+        } catch (Exception $e) {
+            echo "❌ Error: " . $e->getMessage() . "\n";
+        }
+        break;
+
+    case 'help':
+    default:
+        echo "Available commands:\n";
+        echo "  php scripts/luxury serve    - Start development server\n";
+        echo "  php scripts/luxury build    - Build for production\n";
+        echo "  php scripts/luxury migrate  - Setup/Reset database\n";
+        break;
+}
+
+echo "\n";

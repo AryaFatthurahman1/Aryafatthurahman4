@@ -1,0 +1,17 @@
+<IfModule mod_rewrite.c>
+    DirectoryIndex index.php
+    RewriteEngine On
+
+    # Allow direct access to assets, api, and other static files
+    RewriteCond %{REQUEST_URI} ^/(aset|api|publik|node_modules|skrip|basis_data|dokumentasi)/ [NC]
+    RewriteRule ^ - [L]
+
+    # Allow direct access to PHP files
+    RewriteCond %{REQUEST_URI} \.php$ [NC]
+    RewriteRule ^ - [L]
+
+    # For PHP Router - serve index.php for all non-file requests
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^ index.php [QSA,L]
+</IfModule>

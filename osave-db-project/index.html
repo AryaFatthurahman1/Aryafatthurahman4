@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O! Save - POS Database Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #fca311;
+            --secondary: #14213d;
+            --accent: #e5e5e5;
+            --bg: #000000;
+            --surface: #1a1a1a;
+            --text: #ffffff;
+            --text-dim: #a0a0a0;
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .background-blob {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(252, 163, 17, 0.15) 0%, transparent 70%);
+            top: -100px;
+            right: -100px;
+            z-index: -1;
+            filter: blur(100px);
+        }
+
+        .background-blob-2 {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(20, 33, 61, 0.3) 0%, transparent 70%);
+            bottom: -200px;
+            left: -200px;
+            z-index: -1;
+            filter: blur(100px);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem 5%;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            color: var(--primary);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-dim);
+            font-weight: 500;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+        }
+
+        main {
+            padding: 3rem 5%;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero {
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(to bottom right, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .hero p {
+            color: var(--text-dim);
+            font-size: 1.2rem;
+            max-width: 600px;
+        }
+
+        .grid-dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            gap: 2rem;
+        }
+
+        .receipt-card {
+            background: #fff;
+            color: #000;
+            padding: 2.5rem;
+            border-radius: 4px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            font-family: 'JetBrains Mono', monospace;
+            position: relative;
+        }
+
+        .receipt-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 10px;
+            background: repeating-linear-gradient(45deg, #eee, #eee 10px, #fff 10px, #fff 20px);
+        }
+
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .receipt-header h2 { font-weight: 800; font-size: 1.5rem; }
+        .receipt-header p { font-size: 0.8rem; margin-top: 5px; }
+
+        .receipt-divider {
+            border-top: 1px dashed #000;
+            margin: 1rem 0;
+        }
+
+        .receipt-items {
+            width: 100%;
+            font-size: 0.85rem;
+        }
+
+        .receipt-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .receipt-total {
+            margin-top: 1rem;
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .documentation-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2rem;
+        }
+
+        .doc-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            border-bottom: 2px solid var(--border);
+            color: var(--primary);
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tag {
+            background: var(--primary);
+            color: #000;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .code-block {
+            background: #000;
+            padding: 1.5rem;
+            border-radius: 10px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #4ade80;
+            overflow-x: auto;
+            border: 1px solid var(--border);
+            margin-bottom: 1.5rem;
+        }
+
+        .erd-box {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .erd-entity {
+            border: 1px solid var(--primary);
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(252, 163, 17, 0.05);
+        }
+
+        .erd-entity h4 { color: var(--primary); margin-bottom: 5px; }
+        .erd-entity ul { list-style: none; color: var(--text-dim); font-size: 0.85rem; }
+
+        @media (max-width: 900px) {
+            .grid-dashboard { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-blob"></div>
+    <div class="background-blob-2"></div>
+
+    <nav>
+        <div class="logo">O! SAVE DB</div>
+        <div class="nav-links">
+            <div class="nav-link active" onclick="showSection('dashboard')">Dashboard</div>
+            <div class="nav-link" onclick="showSection('database')">Structure</div>
+            <div class="nav-link" onclick="showSection('normalization')">Normalization</div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- DASHBOARD SECTION -->
+        <section id="dashboard" class="section active">
+            <div class="hero">
+                <h1>Transaction Hub</h1>
+                <p>Digital conversion of O! Save physical receipts into high-performance relational data.</p>
+            </div>
+
+            <div class="grid-dashboard">
+                <div class="receipt-card">
+                    <div class="receipt-header">
+                        <h2>O! save</h2>
+                        <p>Jl. Komarudin Lama RT.7 RW.5<br>Kel. Pulo Gebang Kec. Cakung<br>NPWP: 20.786.546.0-427.000</p>
+                    </div>
+                    <div class="receipt-divider"></div>
+                    <div class="receipt-items">
+                        <div class="receipt-item"><span>Ayoma Rolade Chicken 225gr</span><span>9.900</span></div>
+                        <div class="receipt-item"><span>P.Catch Shrimp Shumai 250gr</span><span>18.500</span></div>
+                        <div class="receipt-item"><span>FF Kental Manis Putih 545gr</span><span>17.900</span></div>
+                        <div class="receipt-item"><span>Kampak Emas Minyak Goreng 800</span><span>17.900</span></div>
+                        <div class="receipt-item"><span>Dua belibis Chili Sauce 235m</span><span>12.300</span></div>
+                        <div class="receipt-item"><span>Laurier Xtra Maxi Non Wing 2</span><span>4.500</span></div>
+                        <div class="receipt-item"><span>Unibis Marie Susu 198g</span><span>7.500</span></div>
+                        <div class="receipt-item"><span>Unibis Marie Susu 198g</span><span>7.500</span></div>
+                        <div class="receipt-item"><span>Unibis Marie Susu 198g</span><span>7.500</span></div>
+                    </div>
+                    <div class="receipt-divider"></div>
+                    <div class="receipt-total">
+                        <span>Subtotal (Incl. PPN)</span>
+                        <span>103.500</span>
+                    </div>
+                    <div class="receipt-total" style="font-size: 0.8rem; margin-top: 5px;">
+                        <span>Jumlah Barang</span>
+                        <span>9</span>
+                    </div>
+                    <div class="receipt-total" style="color: #444; border-top: 1px solid #ccc; padding-top: 10px; margin-top: 15px;">
+                        <span>Cash</span>
+                        <span>103.500</span>
+                    </div>
+                    <div class="receipt-divider"></div>
+                    <div style="font-size: 0.65rem; text-align: center; color: #555;">
+                        020, 1, 2004, 290185, 01/05/2026 14:27<br>
+                        Buka 7:00 to 22:00<br>
+                        TERIMA KASIH
+                    </div>
+                </div>
+
+                <div class="documentation-card">
+                    <div class="doc-title">Quick Data Summary</div>
+                    <p style="color: var(--text-dim); margin-bottom: 2rem;">Parsed entities from the physical receipt.</p>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div style="background: var(--glass); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--border);">
+                            <div style="color: var(--primary); font-weight: 800; font-size: 2rem;">9</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">Items Sold</div>
+                        </div>
+                        <div style="background: var(--glass); padding: 1.5rem; border-radius: 15px; border: 1px solid var(--border);">
+                            <div style="color: var(--primary); font-weight: 800; font-size: 2rem;">1</div>
+                            <div style="font-size: 0.8rem; color: var(--text-dim);">Transaction</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 2rem;">
+                        <h4 style="margin-bottom: 10px;">SQL Export Ready</h4>
+                        <div class="code-block">
+SELECT * FROM transaksi WHERE id_transaksi = '290185';
+-- Result: 1 row found. Status: Success.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- DATABASE SECTION -->
+        <section id="database" class="section">
+            <div class="hero">
+                <h1>Entity Architecture</h1>
+                <p>Relational schema designed to handle multi-store transactions and inventory management.</p>
+            </div>
+
+            <div class="erd-box">
+                <div class="doc-title">Entity Relationship Summary</div>
+                
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                    <div class="erd-entity">
+                        <h4>Toko</h4>
+                        <ul>
+                            <li><span class="tag">PK</span> id_toko</li>
+                            <li>nama_toko</li>
+                            <li>alamat</li>
+                            <li>npwp</li>
+                        </ul>
+                    </div>
+                    <div class="erd-entity">
+                        <h4>Transaksi</h4>
+                        <ul>
+                            <li><span class="tag">PK</span> id_transaksi</li>
+                            <li><span class="tag">FK</span> id_toko</li>
+                            <li><span class="tag">FK</span> id_kasir</li>
+                            <li>tanggal, waktu</li>
+                            <li>total_harga</li>
+                        </ul>
+                    </div>
+                    <div class="erd-entity">
+                        <h4>Detail_Transaksi</h4>
+                        <ul>
+                            <li><span class="tag">PK</span> id_detail</li>
+                            <li><span class="tag">FK</span> id_transaksi</li>
+                            <li><span class="tag">FK</span> id_barang</li>
+                            <li>qty, subtotal</li>
+                        </ul>
+                    </div>
+                    <div class="erd-entity">
+                        <h4>Barang</h4>
+                        <ul>
+                            <li><span class="tag">PK</span> id_barang</li>
+                            <li>nama_barang</li>
+                            <li>harga_satuan</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="code-block" style="color: #60a5fa;">
+-- Cardinality Summary
+-- Toko (1) : (N) Transaksi
+-- Kasir (1) : (N) Transaksi
+-- Transaksi (1) : (N) Detail_Transaksi
+-- Barang (1) : (N) Detail_Transaksi
+                </div>
+            </div>
+        </section>
+
+        <!-- NORMALIZATION SECTION -->
+        <section id="normalization" class="section">
+            <div class="hero">
+                <h1>Normalization Process</h1>
+                <p>Ensuring data integrity and reducing redundancy across 3 standard stages.</p>
+            </div>
+
+            <div class="documentation-card">
+                <h3 style="margin-bottom: 1rem; color: var(--primary);">1NF: First Normal Form</h3>
+                <p style="color: var(--text-dim); margin-bottom: 1rem;">Splitting multi-valued attributes into atomic rows.</p>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr><th>TransID</th><th>ItemName</th><th>Qty</th><th>Price</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>290185</td><td>Ayoma Rolade</td><td>1</td><td>9.900</td></tr>
+                            <tr><td>290185</td><td>Shrimp Shumai</td><td>1</td><td>18.500</td></tr>
+                            <tr><td>290185</td><td>Marie Susu</td><td>1</td><td>7.500</td></tr>
+                            <tr><td>...</td><td>...</td><td>...</td><td>...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3 style="margin-bottom: 1rem; color: var(--primary);">2NF: Second Normal Form</h3>
+                <p style="color: var(--text-dim); margin-bottom: 1rem;">Removing partial dependencies (Items to Product Table).</p>
+                <div style="display: flex; gap: 2rem; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 300px;">
+                        <h4 style="font-size: 0.8rem; margin-bottom: 5px;">Table: Barang</h4>
+                        <table>
+                            <thead><tr><th>ID_Barang</th><th>Nama</th></tr></thead>
+                            <tbody><tr><td>B001</td><td>Ayoma Rolade</td></tr></tbody>
+                        </table>
+                    </div>
+                    <div style="flex: 1; min-width: 300px;">
+                        <h4 style="font-size: 0.8rem; margin-bottom: 5px;">Table: TransDetail</h4>
+                        <table>
+                            <thead><tr><th>TransID</th><th>ProdID</th><th>Qty</th></tr></thead>
+                            <tbody><tr><td>290185</td><td>B001</td><td>1</td></tr></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 2rem; margin-bottom: 1rem; color: var(--primary);">3NF: Third Normal Form</h3>
+                <p style="color: var(--text-dim); margin-bottom: 1rem;">Removing transitive dependencies (Separating Cashier & Store info).</p>
+                <div class=" erd-entity" style="border-style: dashed; opacity: 0.8;">
+                    <p>Current State: Fully Optimized. No non-key attribute depends on another non-key attribute.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function showSection(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            
+            document.getElementById(id).classList.add('active');
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

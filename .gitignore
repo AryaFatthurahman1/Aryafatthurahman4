@@ -1,0 +1,21 @@
+# Ignore large binaries
+*.zip
+*.exe
+*.rar
+*.7z
+
+# Ignore dependency folders
+node_modules/
+vendor/
+.env
+.venv/
+env/
+dist/
+build/
+
+# Ignore logs
+*.log
+
+# Ignore OS files
+Thumbs.db
+.DS_Store

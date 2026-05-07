@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es6",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "../typescript-sample/dist"
+  },
+  "include": ["main.ts"]
+}

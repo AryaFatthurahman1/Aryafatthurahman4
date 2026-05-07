@@ -1,0 +1,63 @@
+# SPDX-License-Identifier: Apache-2.0
+
+name: Lint GitHub Actions workflows
+on:
+  push:
+    branches:
+      - "main"
+    paths:
+      - '.github/workflows/*.ya?ml'
+      - '.github/zizmor.ya?ml'
+      - '.poutine.ya?ml'
+  pull_request:
+    branches:
+      - "main"
+    paths:
+      - '.github/workflows/*.ya?ml'
+      - '.github/zizmor.ya?ml'
+      - '.poutine.ya?ml'
+
+env:
+  LC_ALL: en_US.UTF-8
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
+
+jobs:
+  actionlint:
+    permissions:
+      security-events: write # Required for upload-sarif to upload SARIF files.
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Harden Runner"
+        uses: step-security/harden-runner@8d3c67de8e2fe68ef647c8db1e6a09f647780f40 # v2.19.0
+        with:
+          egress-policy: block
+          allowed-endpoints: >
+            api.github.com:443
+            ghcr.io:443
+            github.com:443
+            pkg-containers.githubusercontent.com:443
+
+      - name: "Checkout"
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: "Check workflow files with zizmor"
+        uses: zizmorcore/zizmor-action@b1d7e1fb5de872772f31590499237e7cce841e8e # v0.5.3
+
+      - name: "Check workflow files with poutine"
+        uses: boostsecurityio/poutine-action@e240ebd3eff8b2db5a8e5f6b28f58739d7db2247 # v1.1.4
+        with:
+          output: ${{ runner.temp }}/poutine.sarif
+
+      - name: "Upload poutine SARIF file"
+        uses: github/codeql-action/upload-sarif@95e58e9a2cdfd71adc6e0353d5c52f41a045d225 # v4.35.2
+        with:
+          sarif_file: ${{ runner.temp }}/poutine.sarif
+          category: poutine

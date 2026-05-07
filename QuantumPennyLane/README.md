@@ -1,0 +1,356 @@
+# pytest-quantum
+
+**A cross-framework pytest plugin for quantum program testing.**
+
+Version: 1.0.0
+
+Test quantum programs the same way you test classical code, using pytest. Works with Qiskit, Cirq, Amazon Braket, PennyLane, Graphix, Pytket, Stim, QuTiP, Tequila, and Mitiq.
+
+## Features
+
+### 80+ Quantum Assertions
+- **State assertions**: Fidelity, normalization, Bloch sphere coordinates
+- **Unitary assertions**: Global-phase-tolerant comparison, circuit equivalence
+- **Measurement assertions**: Statistical distribution matching (chi-square), TVD, Hellinger distance
+- **Density matrix assertions**: Trace distance, purity, partial traces
+- **Channel assertions**: CPTP validation, noise channel verification
+- **Benchmarking assertions**: Quantum volume, randomized benchmarking, T1/T2/T2* coherence
+- **Hardware assertions**: Backend calibration, gate fidelity, mirror circuits
+- **QEC assertions**: Stim integration, stabilizer states, logical error rates
+- **Mitiq assertions**: ZNE, CDR, PEC error mitigation validation
+- **Cross-platform assertions**: Compare circuits across frameworks
+- **SyReC integration**: HDL-based synthesis of reversible circuits
+
+### Comprehensive Fixtures
+- **Qiskit**: `aer_simulator`, `aer_statevector_simulator`, `aer_noise_simulator`, `ibm_backend`
+- **Cirq**: `cirq_simulator`, `cirq_sampler`
+- **PennyLane**: `pennylane_device`
+- **Braket**: `braket_simulator`, `braket_cloud_device`
+- **Hardware**: `ionq_backend`, `quantinuum_backend`
+- **Utilities**: `multi_backend_runner`, `benchmark_suite`, `shot_budget`
+
+### CLI Options
+- `--quantum-slow`: Run shot-heavy tests
+- `--quantum-real`: Enable real hardware tests
+- `--quantum-shots N`: Override shot count globally
+- `--quantum-significance P`: Override p-value threshold
+- `--quantum-benchmark`: Run benchmarking tests
+- `--quantum-mitigation`: Run error mitigation tests
+- `--quantum-qec`: Run quantum error correction tests
+
+## Installation
+
+### Core (no quantum SDK required)
+```bash
+pip install pytest-quantum
+```
+
+### With specific frameworks
+```bash
+pip install "pytest-quantum[qiskit]"      # + Qiskit + Aer
+pip install "pytest-quantum[cirq]"        # + Cirq
+pip install "pytest-quantum[pennylane]"     # + PennyLane
+pip install "pytest-quantum[braket]"        # + Amazon Braket
+pip install "pytest-quantum[ibm]"           # + IBM Quantum runtime
+pip install "pytest-quantum[mitiq]"         # + Mitiq
+pip install "pytest-quantum[syrec]"         # + MQT SyReC
+pip install "pytest-quantum[all]"           # Everything
+```
+
+### Development install
+```bash
+git clone https://github.com/qbench/pytest-quantum
+cd pytest-quantum
+pip install -e ".[all,dev]"
+```
+
+## Quick Start
+
+### Test Bell State (Qiskit)
+```python
+import numpy as np
+from pytest_quantum import assert_measurement_distribution, assert_unitary
+
+def test_bell_distribution(aer_simulator):
+    from qiskit import QuantumCircuit, transpile
+    
+    qc = QuantumCircuit(2)
+    qc.h(0)
+    qc.cx(0, 1)
+    qc.measure_all()
+    
+    transpiled = transpile(qc, aer_simulator)
+    counts = aer_simulator.run(transpiled, shots=2000).result().get_counts()
+    
+    # Chi-square test: won't flake on statistical noise
+    assert_measurement_distribution(counts, expected_probs={"00": 0.5, "11": 0.5})
+
+def test_hadamard_unitary():
+    from qiskit import QuantumCircuit
+    qc = QuantumCircuit(1)
+    qc.h(0)
+    
+    H = np.array([[1, 1], [1, -1]]) / np.sqrt(2)
+    # Global-phase-safe — e^(i*theta)H passes too
+    assert_unitary(qc, H)
+```
+
+### Test with PennyLane
+```python
+import numpy as np
+from pytest_quantum import assert_state_fidelity_above
+
+def test_rx_gate(pennylane_device):
+    import pennylane as qml
+    dev = pennylane_device(wires=1)
+    
+    @qml.qnode(dev)
+    def rx_circuit(theta):
+        qml.RX(theta, wires=0)
+        return qml.state()
+    
+    state = np.array(rx_circuit(np.pi))
+    # RX(π) = -iX|0⟩ = -i|1⟩
+    expected = np.array([0, -1j])
+    assert_state_fidelity_above(state, expected, threshold=0.99)
+```
+
+### MQT SyReC (Reversible Circuit Synthesis)
+```python
+from pytest_quantum import (
+    SyReCSynthesizer,
+    assert_syrec_synthesizes,
+    assert_syrec_reversible,
+)
+
+def test_syrec_adder(syrec_synthesizer):
+    source = """
+    module adder(a, b, c)
+        c = a + b;
+    endmodule
+    """
+    assert_syrec_synthesizes(source, method="cost_aware")
+    assert_syrec_reversible(source)
+```
+
+## Available Assertions
+
+### State Assertions
+- `assert_normalized(statevector, atol=1e-8)`
+- `assert_state_fidelity_above(actual, target, threshold=0.99)`
+- `assert_states_close(actual, target, atol=1e-6)`
+- `assert_bloch_sphere_close(statevector, theta, phi, atol=0.1)`
+
+### Unitary/Circuit Equivalence
+- `assert_unitary(circuit, expected_matrix, atol=1e-8)`
+- `assert_circuits_equivalent(circuit_a, circuit_b)`
+- `assert_cross_platform_equivalent(circuit_a, circuit_b)`
+- `assert_qiskit_cirq_equivalent(qiskit_qc, cirq_circuit)`
+
+### Measurement Distributions
+- `assert_measurement_distribution(counts, expected_probs, significance=0.01)`
+- `assert_counts_close(counts_a, counts_b, max_tvd=0.05)`
+- `assert_hellinger_close(counts_a, counts_b, max_distance=0.1)`
+- `assert_kl_divergence_below(counts, expected_probs, max_kl=0.1)`
+
+### Density Matrix
+- `assert_density_matrix_close(rho, sigma, atol=1e-6)`
+- `assert_trace_distance_below(rho, sigma, max_distance=0.01)`
+- `assert_purity_above(rho, min_purity=0.95)`
+
+### Quantum Channels
+- `assert_channel_is_cptp(kraus_ops, atol=1e-8)`
+- `assert_depolarizing_channel(kraus_ops, error_rate, atol=1e-6)`
+- `assert_amplitude_damping_channel(kraus_ops, gamma, atol=1e-6)`
+- `assert_dephasing_channel(kraus_ops, p_dephase, atol=1e-6)`
+
+### Circuit Structure
+- `assert_circuit_depth(circuit, max_depth)`
+- `assert_circuit_width(circuit, expected_qubits)`
+- `assert_gate_count(circuit, gate_name, expected)`
+- `assert_circuit_is_clifford(circuit)`
+- `assert_no_mid_circuit_measurement(circuit)`
+
+### Benchmarking
+- `assert_quantum_volume(backend, target_qv=16, num_trials=100)`
+- `assert_randomized_benchmarking(backend, qubit=0, min_fidelity_per_clifford=0.999)`
+- `assert_t1_above(backend, qubit=0, target_t1_us=50.0)`
+- `assert_t2_above(backend, qubit=0, target_t2_us=30.0)`
+- `assert_gate_fidelity_above(backend, "cx", [0, 1], target_fidelity=0.99)`
+
+### Quantum ML
+- `assert_xeb_fidelity_above(backend, num_qubits=2, target_fidelity=0.9)`
+- `assert_expressibility_above(ansatz_fn, num_qubits=2, num_params=4, target=0.5)`
+- `assert_no_barren_plateau(ansatz_fn, num_qubits=4, num_params=16)`
+
+### Error Mitigation
+- `assert_zne_expectation_close(circuit, observable, expected, executor, atol=0.1)`
+- `assert_zne_reduces_error(circuit, observable, noisy_val, ideal_val, executor)`
+- `assert_cdr_reduces_error(circuit, observable, noisy_val, ideal_val, executor, training_circuits)`
+- `assert_pec_reduces_error(circuit, observable, noisy_val, ideal_val, executor, representations)`
+
+### QEC/Stim
+- `assert_stim_logical_error_rate_below(circuit, max_error_rate, shots=10000)`
+- `assert_stabilizer_state(statevector, stabilizers)`
+
+### SyReC
+- `assert_syrec_parses(source_code)`
+- `assert_syrec_synthesizes(source_code, method="cost_aware")`
+- `assert_syrec_reversible(source_code)`
+- `assert_syrec_cost_below(source_code, max_cost)`
+
+## CLI Usage
+
+### Run basic tests
+```bash
+pytest
+```
+
+### Include slow tests
+```bash
+pytest --quantum-slow
+```
+
+### Run on real hardware
+```bash
+pytest --quantum-real
+```
+
+### Override shot count
+```bash
+pytest --quantum-shots=4000
+```
+
+### Run only specific backends
+```bash
+pytest --quantum-backends=qiskit,cirq
+```
+
+### Run benchmarks
+```bash
+pytest --quantum-benchmark
+```
+
+### Run QEC tests
+```bash
+pytest --quantum-qec
+```
+
+### Update snapshots
+```bash
+pytest --quantum-update-snapshots
+```
+
+## Markers
+
+- `@pytest.mark.quantum`: Mark as quantum test
+- `@pytest.mark.quantum_slow`: Skip unless `--quantum-slow`
+- `@pytest.mark.quantum_real`: Skip unless `--quantum-real`
+- `@pytest.mark.qiskit`: Qiskit-specific test
+- `@pytest.mark.cirq`: Cirq-specific test
+- `@pytest.mark.pennylane`: PennyLane-specific test
+- `@pytest.mark.shots(n=4000)`: Shot count hint
+- `@pytest.mark.significance(p=0.01)`: P-value threshold
+- `@pytest.mark.syrec`: SyReC reversible circuit test
+
+## Random Generators
+
+```python
+from pytest_quantum.random import (
+    random_statevector,
+    random_density_matrix,
+    random_unitary,
+    depolarizing_kraus,
+    random_clifford_circuit,
+)
+
+# Haar-random pure state
+psi = random_statevector(n_qubits=3, seed=42)
+
+# Random density matrix
+rho = random_density_matrix(n_qubits=2, rank=2)
+
+# Haar-random unitary
+U = random_unitary(n_qubits=2, seed=42)
+
+# Depolarizing channel Kraus operators
+kraus_ops = depolarizing_kraus(p=0.01, n_qubits=1)
+```
+
+## Shot Budget Utilities
+
+```python
+from pytest_quantum.statistics import min_shots, recommended_shots
+
+# Minimum shots to detect 5% TVD
+n = min_shots(epsilon=0.05)  # 293 shots
+
+# Recommended shots based on distribution
+n = recommended_shots({"00": 0.499, "01": 0.001, "11": 0.5})  # 5000
+```
+
+## Framework Support
+
+| Framework | Version | Fixtures | Unitary | Clifford | Gate Count |
+|-----------|---------|----------|---------|----------|------------|
+| Qiskit + Aer | ≥1.0 | aer_simulator, aer_statevector_simulator, aer_noise_simulator, qiskit_sampler, qiskit_estimator, ibm_backend | ✓ | ✓ | ✓ |
+| Cirq | ≥1.0 | cirq_simulator, cirq_sampler | ✓ | ✓ | ✓ |
+| Amazon Braket | ≥1.0 | braket_simulator, braket_cloud_device | ✓ | ✓ | ✓ |
+| PennyLane | ≥0.36 | pennylane_device | ✓ | ✓ | ✓ |
+| Graphix | ≥0.3 | graphix_backend | ✗ | ✗ | ✗ |
+| Pytket | ≥1.0 | pytket_circuit_factory | ✓ | ✓ | ✓ |
+| Stim | ≥1.13 | stim_sampler | ✗ | ✗ | ✗ |
+| QuTiP | ≥4.7 | qutip_solver | ✗ | ✗ | ✗ |
+| Tequila | ≥1.9 | tequila_backend | ✗ | ✗ | ✗ |
+| IBM Runtime | ≥0.45 | ibm_backend | ✓ | ✗ | ✗ |
+
+## Development
+
+### Format code
+```bash
+black src/ tests/
+isort src/ tests/
+ruff check src/ tests/
+```
+
+### Run tests
+```bash
+pytest
+pytest --quantum-slow
+pytest --quantum-benchmark
+```
+
+### Type checking
+```bash
+mypy src/
+```
+
+## Citation
+
+If you use pytest-quantum in research, please cite:
+
+```bibtex
+@software{ghatule2026pytest_quantum,
+  title = {pytest-quantum: A cross-framework pytest plugin for quantum program testing},
+  author = {Ghatule, Tejas and Quantum Software Team},
+  year = {2026},
+  url = {https://github.com/qbench/pytest-quantum},
+  version = {1.0.0}
+}
+```
+
+## License
+
+MIT License
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for setup, test commands, code style, and PR checklist.
+
+## Related Projects
+
+- [MQT SyReC](https://github.com/munich-quantum-toolkit/syrec): HDL-based synthesis of reversible circuits
+- [PennyLane](https://pennylane.ai): Cross-platform quantum machine learning
+- [Qiskit](https://qiskit.org): IBM's quantum computing framework
+- [Mitiq](https://mitiq.readthedocs.io): Quantum error mitigation toolkit
+- [Stim](https://github.com/quantumlib/Stim): Fast stabilizer circuit simulation
